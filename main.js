@@ -94,7 +94,6 @@ const placeSymbol = (box) => {
     let sym = currentPlayer().symbol;
     let boxIndex = {i: undefined, j: undefined}
     //switch(box){case 1:boxIndex={i:0,j:0};break;case 2:boxIndex={i:0,j:1};break;case 3:boxIndex={i:0,j:2};break;case 4:boxIndex={i:1,j:0};break;case 5:boxIndex={i:1,j:1};break;case 6:boxIndex={i:1,j:2};break;case 7:boxIndex={i:2,j:0};break;case 8:boxIndex={i:2,j:1};break;case 9:boxIndex={i:2,j:2};break;default:e("yep not workibng")}
-    
     switch(box) {
         case 1:
             boxIndex = {i: 0, j: 0};
@@ -173,14 +172,14 @@ const placeSymbol = (box) => {
     }
     
     sb(board);
-    // checkMatch(box, sym, boxIndex);
     // check for matches
     checkMATCHES15Liner(sym);
     // change turn
     changeTurn();
 }
 
-
+// what I thought would work: 
+/*
 function checkMatch(box, sym, boxIndex) {
     console.time("a")
     const i = boxIndex.row;
@@ -236,6 +235,7 @@ function checkMatch(box, sym, boxIndex) {
     }
     console.timeEnd("a")
 }
+*/
 
 
 // compacter version
