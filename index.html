@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XOXO</title>
+    <style>
+        body{
+            height: 1000px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            background-color: hsl(242, 89%, 7%);
+            color: azure;
+        }
+        main{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #grid{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        #whole{
+            height: 100vh;
+        }
+        .box{
+            height: 70px;
+            width: 70px;
+            border: 1px solid hsl(0, 0%, 96%);
+            font-size:40px;
+            color: azure;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body id="boddy">
+    <main id="whole">
+        <section>
+            <section id="grid">
+                <div class="box" id="b1"></div>
+                <div class="box" id="b2"></div>
+                <div class="box" id="b3"></div>
+                <div class="box" id="b4"></div>
+                <div class="box" id="b5"></div>
+                <div class="box" id="b6"></div>
+                <div class="box" id="b7"></div>
+                <div class="box" id="b8"></div>
+                <div class="box" id="b9"></div>
+            </section>
+            <section>
+                <div id="dialouge">`</div>
+                <div>X: <span id="player_1_score"></span></div>
+                <div>O: <span id="player_2_score"></span></div>
+            </section>
+
+        </section>
+    </main>
+    
+    
+
+    <script src="main.js"></script>
+</body>
+</html>
