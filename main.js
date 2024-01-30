@@ -5,7 +5,8 @@
 
 // DOM
 // box
-const dialouge = document.getElementById("dialouge")
+const dialougeElem = document.getElementById("dialouge");
+const gridElem = document.getElementById("grid");
 
 // init grid boxes
 const b1 = document.getElementById("b1");
@@ -17,6 +18,7 @@ const b6 = document.getElementById("b6");
 const b7 = document.getElementById("b7");
 const b8 = document.getElementById("b8");
 const b9 = document.getElementById("b9");
+const b10 = document.getElementById("b10")
 
 // add event listeners
 b1.addEventListener('click', () => {placeSymbol(1)});
@@ -73,6 +75,10 @@ class Player {
     increaseScore() {
         this.#score += 1;
     }
+
+    get name() {
+        return this.#name;
+    }
 }
 
 // store the 2 player objects 
@@ -89,11 +95,33 @@ const whoseFirst = () => {
     }
 }
 
+// changes the turn to the next player
+const changeTurn = () => {
+    if (playerArr[0].isTurn) {
+        playerArr[0].isTurn = false;
+        playerArr[1].isTurn = true;
+    } else if(playerArr[1].isTurn) {
+        playerArr[1].isTurn = false;
+        playerArr[0].isTurn = true;
+    }
+}
+
+// returns player who has the turn
+const currentPlayer = () => {
+    if(playerArr[0].isTurn) {
+        return playerArr[0];
+    } else {
+        return playerArr[1];
+    }
+}
+
     // placing symbols
 const placeSymbol = (box) => {
     let sym = currentPlayer().symbol;
-    let boxIndex = {i: undefined, j: undefined}
+    let boxIndex = {i: null, j: null}
     //switch(box){case 1:boxIndex={i:0,j:0};break;case 2:boxIndex={i:0,j:1};break;case 3:boxIndex={i:0,j:2};break;case 4:boxIndex={i:1,j:0};break;case 5:boxIndex={i:1,j:1};break;case 6:boxIndex={i:1,j:2};break;case 7:boxIndex={i:2,j:0};break;case 8:boxIndex={i:2,j:1};break;case 9:boxIndex={i:2,j:2};break;default:e("yep not workibng")}
+    
+    // returns the indexes of the current boxes as an object
     switch(box) {
         case 1:
             boxIndex = {i: 0, j: 0};
@@ -125,11 +153,12 @@ const placeSymbol = (box) => {
         default:
             e("yep not workibng");
     }
-    if (currentPlayer().isTurn == true) {
+    // checks if it's the current player's turn and if the board is unoccupied
+    if (currentPlayer().isTurn == true && (board[boxIndex.i][boxIndex.j] == 0)) {
         switch(box) {
             case 1:
                 board[0][0] = sym;
-                b1.textContent = sym;
+                b1.textContent = sym;   // sticks the symbol to the box in the grid 
                 break;
             case 2:
                 board[0][1] = sym;
@@ -164,8 +193,9 @@ const placeSymbol = (box) => {
                 b9.textContent = sym;
                 break;
             default:
+                // very excellent error handling (*/w＼*)
                 e(`${board}`);
-                return e("???")
+                return e("0_0 ??? INTRUDER ALERT!!! ? >:[")
         }
     } else {
         e('yeah smth went wohrng')
@@ -173,74 +203,16 @@ const placeSymbol = (box) => {
     
     sb(board);
     // check for matches
-    checkMATCHES15Liner(sym);
+    let currentPlayerVar = currentPlayer();
+    checkMATCHES(sym, currentPlayerVar);
     // change turn
     changeTurn();
 }
 
-// what I thought would work: 
-/*
-function checkMatch(box, sym, boxIndex) {
-    console.time("a")
-    const i = boxIndex.row;
-    const j = boxIndex.col;
-    switch (box) {
-        case 1:
-            if ((board[i+1][j] == sym && board[i + 2][j] == sym) || 
-                (board[i][j+1] == sym && board[i][j + 2] == sym) || 
-                (board[i+1][j+1] == sym && board[i+2][j+2] == sym)) {
-                console.log("1")
-            }
-            break;
-        case 2:
-            if ((board[i][j-1] == sym && board[i][j+1] == sym) || 
-                (board[i][j+1] == sym && board[i][j+2] == sym)) {
-                console.log("2")
-            }
-            break;
-        case 3:
-            console.log("a")
-            if ((board[i+1][j-1] == sym && board[i+2][j-2] == sym) || 
-                (board[i+1][j-1] == sym && board[i+2][j-2] == sym) || 
-                (board[i+1][j] == sym && board[i+2][j] == sym)) {
-                console.log("3");
-            }
-            break;
-        case 4:
-            if ((board[i][j+1] == sym && board[i][j+2]) || 
-                (board[i-1][j] == sym && board[i-1][j] == sym)) {
-                console.log("4")
-            }
-            break;
-        case 5:
-            // AGHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-            if ((board[i+1][j] == sym && board[i-1][j]) || (board[i][j-1] == sym && board[i][j+1] == sym) || (board[i-1][j-1] == sym && board[i+1][j+1] == sym) || 
-                (board[i+1][j-1] == sym && board[i-1][j+1] == sym)) {
-                console.log("5")
-            }
-            break;
-        case 6:
-            if ((board[i-1][j] && board[i-2][j]) || 
-                (board[i][j+1] && board[i][j-1])){
-                console.log("6")
-            }
-            break;
-        case 7:
-            
-            
-            
-        default:
-            console.log("this is not")
-        
-    }
-    console.timeEnd("a")
-}
-*/
 
-
-// compacter version
-// checks matches for all 
-const checkMATCHES15Liner = (sym) => {
+// checks all 8 possible lines one could make in the grid
+const checkMATCHES = (sym, player) => {
+    // an if condition of about 608 characters long
     if ((board[0][0] == sym && board[1][0] == sym && board[2][0] == sym) || 
         (board[0][0] == sym && board[0][1] == sym && board[0][2] == sym) || 
         (board[0][0] == sym && board[1][1] == sym && board[2][2] == sym) || 
@@ -251,51 +223,46 @@ const checkMATCHES15Liner = (sym) => {
         (board[2][2] == sym && board[1][2] == sym && board[0][2] == sym))
     {
         board = [[0, 0, 0],[0, 0, 0],[0, 0, 0]];
-        currentPlayer().increaseScore();
-        dialouge.innerHTML = `<h1>${sym} Won!</h1>`;
-        ROYGBIVANDMORE(); // ooooooh
+        resetGrid();
+        player.increaseScore();
+        dialougeElem.innerHTML = `<h1>${sym} Won!</h1> "${player.name}"`;
+        ROYGBIVANDMORE(); 
+    // checks if the board occupied and no match has been found
     } 
-}
-
-// changes the turn to the next player
-const changeTurn = () => {
-    if (playerArr[0].isTurn) {
-        playerArr[0].isTurn = false;
-        playerArr[1].isTurn = true;
-    } else if(playerArr[1].isTurn) {
-        playerArr[1].isTurn = false;
-        playerArr[0].isTurn = true
+    else if (board[0][0] && board[0][1] && board[0][2] && board[1][0] && board[1][1] && board[1][2] && board[2][0] && board[2][1] && board[2][2])
+    {
+        resetGrid();
+        dialougeElem.innerHTML = `<h1>Tie</h1>`;
     }
 }
 
-// returns player who has the turn
-const currentPlayer = () => {
-    if(playerArr[0].isTurn) {
-        return playerArr[0];
-    } else {
-        return playerArr[1];
-    }
+const resetGrid = () => {
+    board = [[0, 0, 0],[0, 0, 0],[0, 0, 0]];
+    b1.textContent = null;
+    b2.textContent = null;
+    b3.textContent = null;
+    b4.textContent = null;
+    b5.textContent = null;
+    b6.textContent = null;
+    b7.textContent = null;
+    b8.textContent = null;
+    b9.textContent = null;
 }
 
-
-playerArr.push(new Player("hello", "X"));
-playerArr.push(new Player("hi", "O"));
-
-whoseFirst();
-
-
+// flashy stuff
 const ROYGBIVANDMORE = () => {
     setInterval(() => {
-    	document.getElementById("whole").style.backgroundColor = `hsl(${Math.floor(Math.random()*250)}, 50%, 50%)`;
+    //                                                                    random hue                   sat  light
+    	document.getElementById("grid").style.backgroundColor = `hsl(${Math.floor(Math.random()*260)}, 70%, 50%)`;
     }, 100)
 }
 
+// the main function is called when the document and dom is finished loading
+document.addEventListener(('DOMContentLoaded'), () => {
+    // creates two players
+    playerArr.push(new Player("hello", "X"));
+    playerArr.push(new Player("hi", "O"));
 
-
-
-
-
-
- 
- 
- 
+    // decides which player is first by random chance
+    whoseFirst();
+});
