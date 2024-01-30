@@ -7,7 +7,7 @@
     <style>
         body{
             height: 1000px;
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-family: 'Cascadia Code';
             background-color: hsl(242, 89%, 7%);
             color: azure;
         }
@@ -19,6 +19,9 @@
         #grid{
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
+            row-gap: 2px;
+            column-gap: 2px;
+            cursor: pointer;
         }
         #whole{
             height: 100vh;
@@ -27,7 +30,7 @@
             height: 70px;
             width: 70px;
             border: 1px solid hsl(0, 0%, 96%);
-            font-size:40px;
+            font-size:60px;
             color: azure;
             display: flex;
             justify-content: center;
@@ -35,7 +38,7 @@
         }
     </style>
 </head>
-<body id="boddy">
+<body>
     <main id="whole">
         <section>
             <section id="grid">
@@ -49,10 +52,10 @@
                 <div class="box" id="b8"></div>
                 <div class="box" id="b9"></div>
             </section>
-            <section>
-                <div id="dialouge">`</div>
-                <div>X: <span id="player_1_score"></span></div>
-                <div>O: <span id="player_2_score"></span></div>
+            <section style="display: flex;justify-content: center;">
+                <div id="dialouge">&nbsp;</div>
+                <!-- <div>X: <span id="player_1_score"></span></div>
+                <div>O: <span id="player_2_score"></span></div> -->
             </section>
 
         </section>
